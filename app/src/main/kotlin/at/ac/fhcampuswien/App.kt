@@ -6,6 +6,18 @@ package at.ac.fhcampuswien
 class App {
     // Game logic for a number guessing game
     fun playNumberGame(digitsToGuess: Int = 4) {
+        val goal = generateRandomNonRepeatingNumber(digitsToGuess)
+        //println(goal)
+
+        var output = "Output: 0:0"
+        while (output != "Output: $digitsToGuess:$digitsToGuess"){
+            println()
+            print("User Input: ")
+            val input = readln().toInt()
+            output = checkUserInputAgainstGeneratedNumber(input, goal).toString()
+            print(output)
+        }
+        println("-> user wins!")
         //TODO: build a menu which calls the functions and works with the return values
     }
 
@@ -24,8 +36,10 @@ class App {
      * @throws IllegalArgumentException if the length is more than 9 or less than 1.
      */
     val generateRandomNonRepeatingNumber: (Int) -> Int = { length ->
-        //TODO implement the function
-        0   // return value is a placeholder
+        if (length !in (1..9)){
+            throw IllegalArgumentException()
+        }
+        (1..9).toList().shuffled().take(length).joinToString("").toInt()
     }
 
     /**
@@ -45,12 +59,33 @@ class App {
      * @throws IllegalArgumentException if the inputs do not have the same number of digits.
      */
     val checkUserInputAgainstGeneratedNumber: (Int, Int) -> CompareResult = { input, generatedNumber ->
-        //TODO implement the function
-        CompareResult(0, 0)   // return value is a placeholder
+        var inputStr = input.toString()
+        var numberStr = generatedNumber.toString()
+        if (inputStr.length != numberStr.length || numberStr.length != numberStr.toCharArray().toSet().size){
+            throw IllegalArgumentException()
+        }
+        if (inputStr == numberStr) {
+            CompareResult(inputStr.length,inputStr.length)
+        } else {
+            val inputArray = inputStr.toCharArray()
+            var correct = 0
+            var misplaced = 0
+            inputArray.forEachIndexed { index, number ->
+                if (number in numberStr) {
+                    if (number == numberStr[index]) {
+                        correct++
+                    }
+                    misplaced++
+                }
+            }
+            misplaced = minOf(misplaced, inputStr.toCharArray().toSet().size)
+            CompareResult(correct, misplaced)
+        }
     }
 }
 
 fun main() {
-    println("Hello World!")
+    val test = App()
     // TODO: call the App.playNumberGame function with and without default arguments
+    test.playNumberGame(4)
 }
