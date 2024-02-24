@@ -7,10 +7,9 @@ class App {
     // Game logic for a number guessing game
     fun playNumberGame(digitsToGuess: Int = 4) {
         val goal = generateRandomNonRepeatingNumber(digitsToGuess)
-        //println(goal)
 
         var output = "Output: 0:0"
-        while (output != "Output: $digitsToGuess:$digitsToGuess"){
+        while (output != "Output: $digitsToGuess:$digitsToGuess") {
             println()
             print("User Input: ")
             val input = readln().toInt()
@@ -36,10 +35,10 @@ class App {
      * @throws IllegalArgumentException if the length is more than 9 or less than 1.
      */
     val generateRandomNonRepeatingNumber: (Int) -> Int = { length ->
-        if (length !in (1..9)){
+        if (length !in (1..9)) {
             throw IllegalArgumentException()
         }
-        (1..9).toList().shuffled().take(length).joinToString("").toInt()
+        (1..9).shuffled().take(length).joinToString("").toInt()
     }
 
     /**
@@ -59,33 +58,19 @@ class App {
      * @throws IllegalArgumentException if the inputs do not have the same number of digits.
      */
     val checkUserInputAgainstGeneratedNumber: (Int, Int) -> CompareResult = { input, generatedNumber ->
-        var inputStr = input.toString()
-        var numberStr = generatedNumber.toString()
-        if (inputStr.length != numberStr.length || numberStr.length != numberStr.toCharArray().toSet().size){
+        val inputStr = input.toString()
+        val numberStr = generatedNumber.toString()
+        if (inputStr.length != numberStr.length || numberStr.length != numberStr.toCharArray().toSet().size) {
             throw IllegalArgumentException()
         }
-        if (inputStr == numberStr) {
-            CompareResult(inputStr.length,inputStr.length)
-        } else {
-            val inputArray = inputStr.toCharArray()
-            var correct = 0
-            var misplaced = 0
-            inputArray.forEachIndexed { index, number ->
-                if (number in numberStr) {
-                    if (number == numberStr[index]) {
-                        correct++
-                    }
-                    misplaced++
-                }
-            }
-            misplaced = minOf(misplaced, inputStr.toCharArray().toSet().size)
-            CompareResult(correct, misplaced)
-        }
+        val (correct, misplaced) = inputStr.zip(numberStr).let { pairs -> pairs.count { (input, number) -> input == number } to minOf(pairs.count { (input, _) -> input in numberStr }, inputStr.toSet().size) }
+        CompareResult(correct, misplaced)
     }
 }
 
 fun main() {
     val test = App()
     // TODO: call the App.playNumberGame function with and without default arguments
-    test.playNumberGame(4)
+    test.playNumberGame(3)
+    test.playNumberGame()
 }
