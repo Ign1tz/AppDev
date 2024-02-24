@@ -54,7 +54,7 @@ fun operation(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
 val multiply: (Int, Int) -> Int = { x, y -> x * y }
 val sum: (Int, Int) -> Int = { x, y -> x + y }
 
-fun calculateAndPrint(operation: (Int, Int) -> Int, x: Int, y: Int) {
+fun calculateAndPrint(operation: (Int, Int) -> Int, x: Int, y: Int): String {
     val result = operation(x, y)
     return "Result: $result"
 }
