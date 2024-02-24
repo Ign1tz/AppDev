@@ -8,12 +8,12 @@ class App {
     fun playNumberGame(digitsToGuess: Int = 4) {
         val goal = generateRandomNonRepeatingNumber(digitsToGuess)
 
-        var output = "Output: 0:0"
-        while (output != "Output: $digitsToGuess:$digitsToGuess") {
+        var output:CompareResult? = null
+        while (output != CompareResult(digitsToGuess, digitsToGuess)) {
             println()
             print("User Input: ")
             val input = readln().toInt()
-            output = checkUserInputAgainstGeneratedNumber(input, goal).toString()
+            output = checkUserInputAgainstGeneratedNumber(input, goal)
             print(output)
         }
         println("-> user wins!")
