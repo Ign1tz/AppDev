@@ -9,17 +9,61 @@
 ## Questions
 ### Describe how Kotlin handles null safety. What are nullable types and non-null types in Kotlin? (0,5 points)
 
-<span style="color:blue">Provide your answer here! </span>
+<span style="color:blue">In Kotlin, null safety is a key feature designed to help developers avoid null pointer exceptions, which are common in languages like Java. Kotlin achieves this through a combination of nullable and non-null types.</span>
 > Note: you can also use code snippets to illustrate your answer. 
 
 ```kotlin 
 // example code snippet
-val a: String = "value" // non-null type
+var nullableString: String? = "Hello"
+nullableString = null //is allowed
+
+var nonNullString: String = "World"
+nonNullString = null // Will throw an error
+
+//allows to safely access properties even if object is null (returns null)
+val length: Int? = nullableString?.length
+
+//provide a defautl value if expression is null
+val lengthOrDefault: Int = nullableString?.length ?: -1 
+
+//safely cast variable to string, returns null insted of throwing exception
+val castedString: String? = object as? String 
 ```
 
 ### What are lambda expressions and higher order functions in Kotlin? Why would you store a function inside a variable? (0,5 points)
 
-<span style="color:blue">Provide your answer here!</span>
+<span style="color:blue">Lambda expressions are anonymous functions that can be treated as values. They are declared using curly braces {} and the -> operator to separate parameters from the function body.</span>
+
+```kotlin 
+// example code snippet
+val multiply: (Int, Int) -> Int = { x, y -> x * y }
+```
+
+<span style="color:blue">Higher-order functions are functions that can accept other functions as parameters and/or return functions as results.</span>
+
+```kotlin 
+// example code snippet
+fun operation(x: Int, y: Int, operation: (Int, Int) -> Int): Int {
+    return operation(x, y)
+}
+```
+
+<span style="color:blue">Using a variable to store a function means you can pass them around as parameters. Which is particularly useful when abstracting behavior while still providing flexibilty.</span>
+
+```kotlin 
+val multiply: (Int, Int) -> Int = { x, y -> x * y }
+val sum: (Int, Int) -> Int = { x, y -> x + y }
+
+fun calculateAndPrint(operation: (Int, Int) -> Int, x: Int, y: Int) {
+    val result = operation(x, y)
+    return "Result: $result"
+}
+
+calculateAndPrint(multiply, 3, 4) // Result: 12
+calculateAndPrint(sum, 3, 4) // Result: 7
+```
+
+
 
 ### Provide a solution for the following number guessing game inside `App.kt`. (3 points)
 
